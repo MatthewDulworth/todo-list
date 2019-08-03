@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+   <meta charset='UTF-8'>
+   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+   <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+   <title>Todo List</title>
+
+   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css'>
+   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto&display=swap'>
+   <!-- <link rel='stylesheet' href='assets/css/todos.css'> -->
+   <link rel='stylesheet' href='assets/css/styles.css'>
+   <script src='assets/js/lib/jquery-3.4.1.min.js'></script>
+</head>
+
+<body>
+   <main>
+
+      <header>
+         <span> TO-DO LIST </span>
+         <span id='plus'>
+            <i class='fa fa-plus rotate'></i>
+         </span>
+      </header>
+
+      <section id='new-todo'>
+         <input id="create-todo" type='text' placeholder='Add New Todo' autocomplete="off">
+      </section>
+
+      <section id='todos'>
+         <ul>
+            <li>
+               <div>
+                  <span class='check far fa-circle'></span>
+                  <input class='todo-text' value="Walk the dog" maxlength="50" autocomplete="off">
+               </div>
+               <span class='menu'>
+                  <i class='fa fa-trash'></i>
+               </span>
+            </li>
+            <li><div><span class='check far fa-circle'></span><input class='todo-text' value="Get peanuts" maxlength="50" autocomplete="off"></div><span class='menu'><i class='fa fa-trash'></i></span></li>
+         </ul>
+      </section>
+
+   </main>
+
+   <!-- <script src='assets/js/todos.js'></script> -->
+   <script src='assets/js/main.js'></script>
+</body>
+
+</html>

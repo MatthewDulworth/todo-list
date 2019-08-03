@@ -1,0 +1,149 @@
+html {
+   box-sizing: border-box;
+}
+
+*, *:before, *:after {
+   box-sizing: inherit;
+}
+
+body {
+   font-family: 'Roboto', sans-serif;
+   margin: 0;
+   padding: 0;
+   background: #40E0D0;
+   background: -webkit-linear-gradient(to right, #FF0080, #FF8C00, #40E0D0);
+   background: linear-gradient(to right, #FF0080, #FF8C00, #40E0D0);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+main {
+   color: black;
+   width: 600px;
+   margin: 60px 0;
+   padding: 20px;
+   border-radius: 15px;
+   background-color: white;
+   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+}
+
+header {
+   display: flex;
+   justify-content: space-between;
+   font-size: 24px;
+   border-bottom: 1px dashed grey;
+   margin-bottom: 20px;
+}
+
+/******************************** this bit is relevent ***************************/
+#plus{
+   transition: all 0.1s linear;
+}
+
+#new-todo {
+   border-bottom: none;
+   margin-bottom: 0px;
+   line-height: 0;
+   opacity: 0;
+   overflow: hidden;
+   transition: all 0.2s linear;
+}
+
+#new-todo.visible{
+   border-bottom: 1px dashed grey;
+   margin-bottom: 15px;
+   line-height: normal;
+   opacity: 1;
+}
+
+#create-todo {
+   height: 0;
+   width: 100%;
+   border: none;
+   font-size: 16px;
+   transition: 0.2s linear;
+}
+
+#create-todo.visible{
+   height: 21px;
+}
+
+ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+li {
+   border-bottom: 1px dashed grey;
+   padding-bottom: 2px;
+   margin-bottom: 15px;
+   display: flex;
+   justify-content: space-between;
+}
+
+li div{
+   width: 500px;
+   display: flex;
+   align-items: center;
+}
+
+.todo-text {
+   border: none;
+   width: 479px;
+   font-size: 16px;
+   padding: 0px;
+   margin: 0px;
+}
+
+.check{
+   margin-right: 5px;
+   height: 16px;
+}
+
+.menu{
+   width: 0;
+   opacity: 0;
+   transition: 0.2s linear;
+}
+
+li:hover .menu{
+   width: 17px;
+   opacity: 1;
+}
+
+/******************************** this bit is relevent ***************************/
+.fa-trash{
+   transition: all 0.1s linear;
+}
+
+.rotate{
+   -moz-transition: all 0.2s linear;
+   -webkit-transition: all 0.2s linear;
+   transition: all 0.2s linear;
+}
+
+.rotate.down{
+   -moz-transform:rotate(90deg);
+   -webkit-transform:rotate(90deg);
+   transform:rotate(90deg);
+}
+
+/******************************** this bit is relevent ***************************/
+.rainbow-text {
+   background: -webkit-linear-gradient(to right, #FF0080, #FF8C00);
+   background: linear-gradient(to right, #FF0080, #FF8C00);
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
+
+.round-rainbow-border {
+   width: 300px;
+   height: 80px;
+   border: double 4px transparent;
+   border-radius: 80px;
+   background-image: linear-gradient(white, white), radial-gradient(circle at top left, #f00, #3020ff);
+   background-origin: border-box;
+   background-clip: content-box, border-box;
+}
