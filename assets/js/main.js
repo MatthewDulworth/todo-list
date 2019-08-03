@@ -19,7 +19,7 @@ $("main").on({
    mouseleave: function () {
       $(this).removeClass("rainbow-text");
    }
-}, "#plus, .fa-trash");
+}, "#plus, .fa-trash, .check");
 
 // rotate animation
 $(".rotate").click(function () {
