@@ -38,7 +38,6 @@ header {
 
 /******************************** this bit is relevent ***************************/
 #plus{
-   transition: all 0.1s linear;
    cursor: pointer;
 }
 
@@ -117,7 +116,6 @@ li:hover .menu{
 
 /******************************** this bit is relevent ***************************/
 .fa-trash{
-   transition: all 0.1s linear;
    cursor: pointer;
 }
 
