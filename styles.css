@@ -36,7 +36,6 @@ header {
    margin-bottom: 20px;
 }
 
-/******************************** this bit is relevent ***************************/
 #plus{
    cursor: pointer;
 }
@@ -109,12 +108,11 @@ li div{
    transition: 0.2s linear;
 }
 
-li:hover .menu{
+li:hover.menu{
    width: 17px;
    opacity: 1;
 }
 
-/******************************** this bit is relevent ***************************/
 .fa-trash{
    cursor: pointer;
 }
@@ -131,10 +129,12 @@ li:hover .menu{
    transform:rotate(90deg);
 }
 
-/******************************** this bit is relevent ***************************/
 .rainbow-text {
-   background: -webkit-linear-gradient(to right, #FF0080, #FF8C00);
+   background: -webkit-linear-gradient(left, #FF0080, #FF8C00);
+   background: -o-linear-gradient(right, #FF0080, #FF8C00);
+   background: -moz-linear-gradient(right, #FF0080, #FF8C00);
    background: linear-gradient(to right, #FF0080, #FF8C00);
+   -webkit-background-clip: text;
    background-clip: text;
    -webkit-text-fill-color: transparent;
 }
