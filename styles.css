@@ -108,7 +108,7 @@ li div{
    transition: 0.2s linear;
 }
 
-li:hover.menu{
+li:hover .menu{
    width: 17px;
    opacity: 1;
 }

@@ -1,66 +1,125 @@
-let counter = 0;
-init();
+appWrapper = "main";
+plusButton = "#plus";
+createTodoInput = "#create-todo";
+newTodoSection = "#new-todo";
+clearButton = "clear";
+todoList = "ul";
 
-// show the create new todo menu
-$("#plus").click(function () {
-   $("#new-todo").toggleClass("visible");
-   $("#create-todo").toggleClass("visible");
-});
+class Todo {
+   constructor(text, completed) {
+      this.text = text;
+      this.completed = completed;
+      todosContainer.addTodo(this);
+   }
+   toggleCompleted = () => {
+      this.completed = !(this.completed);
+   }
+   html = () => {
+      let html = `<li><div><span class='check far fa-circle'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
+      return html;
+   }
+}
 
-// hover effects
-$("main").on({
-   mouseenter: function () {
-      $(this).addClass("rainbow-text");
+let todosContainer = {
+   todos: [],
+   localStorageKey: "todosContainer",
+
+   storeContainer() {
+      localStorage.setItem(
+         this.localStorageKey,
+         JSON.stringify(this.todos)
+      );
    },
-   mouseleave: function () {
-      $(this).removeClass("rainbow-text");
-   }
-}, "#plus, .fa-trash, .check");
+   addTodo(todo) {
+      this.todos.push(todo);
+   },
+   initTodos() {
+      let storageArray = JSON.parse(localStorage.getItem(this.localStorageKey));
 
-// rotate animation
-$(".rotate").click(function () {
-   $(this).toggleClass("down");
-});
-
-// create new todo
-$("#create-todo").keypress(function (event) {
-   if (event.which === 13) {
-      let html = `<li id="${counter}"><div><span class='check far fa-circle'></span><input class='todo-text' value="${$(this).val()}" maxlength="50" autocomplete="off"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
-      $("ul").prepend(html);
-      $(this).val("");
-      localStorage.setItem(counter,html);
-      counter++;
-      localStorage.setItem("counter",counter);
-   }
-});
-
-// clear button 
-$("#clear").click(function(){
-   $("ul").empty();
-   localStorage.clear();
-});
-
-// checkmarks
-$("ul").on("click", ".check", function () {
-   $(this).toggleClass("fa-circle fa-check-circle");
-});
-
-// delete todo
-$("ul").on("click", ".fa-trash", function () {
-   localStorage.removeItem($(this).parent().parent().attr("id"));
-   $(this).parent().parent().remove();
-});
-
-// local storage 
-function init(){
-   for(i=localStorage.getItem("counter"); i>=0; i--){
-      $("ul").append(localStorage.getItem(i));
+      for(let i=0; i<this.length(); i++){
+         let todo = new Todo(storageArray[i].text, storageArray[i].completed);
+         console.log(todo);
+         this.addTodo(todo);
+      }
+   },
+   length(){
+      return this.todos.length;
    }
 }
 
-// clear function
-function clearTodo(){
-   $("ul").empty();
-   localStorage.clear();
-   counter = 0;
+let eventHandler = {
+   addEventListeners() {
+      this.addPlusButtonClickEvent();
+      this.addRotateClickEvent();
+      this.addHoverEffectsEvent();
+      this.addCreateNewTodoEvent();
+      this.addClearButtonClickEvent();
+      this.addToggleCompletedTodoEvent();
+      this.addDeleteTodoEvent();
+   },
+   addPlusButtonClickEvent() {
+      $(plusButton).click(function () {
+         $("#new-todo").toggleClass("visible");
+         $("#create-todo").toggleClass("visible");
+      });
+   },
+   addRotateClickEvent() {
+      $(".rotate").click(function () {
+         $(this).toggleClass("down");
+      });
+   },
+   addHoverEffectsEvent() {
+      $(appWrapper).on({
+         mouseenter: function () {
+            $(this).addClass("rainbow-text");
+         },
+         mouseleave: function () {
+            $(this).removeClass("rainbow-text");
+         }
+      }, "#plus, .fa-trash, .check");
+   },
+   addCreateNewTodoEvent() {
+      $(createTodoInput).keypress(function (event) {
+         if (event.which === 13) {
+            let todo = new Todo($(this).val(), false);
+            todosContainer.storeContainer();
+            $(todoList).prepend(todo.html());
+            $(this).val("");
+         }
+      });
+   },
+   addClearButtonClickEvent() {
+      $(clearButton).click(function () {
+         $("ul").empty();
+         localStorage.clear();
+      });
+   },
+   addToggleCompletedTodoEvent() {
+      $(todoList).on("click", ".check", function () {
+         let listItemIndex = $(this).parent().parent().index();
+         $(this).toggleClass("fa-circle fa-check-circle");
+         todosContainer.todos[listItemIndex].toggleCompleted();
+      });
+   },
+   addDeleteTodoEvent() {
+      $(todoList).on("click", ".fa-trash", function () {
+         localStorage.removeItem($(this).parent().parent().attr("id"));
+         $(this).parent().parent().remove();
+      });
+   }
 }
+
+function initApp() {
+   eventHandler.addEventListeners();
+   console.log(localStorage.length);
+
+   if (localStorage.length != 0) {
+      todosContainer.initTodos();
+
+      for(let i=0; i<todosContainer.length(); i++){
+        
+      }
+   }
+}
+
+initApp();
