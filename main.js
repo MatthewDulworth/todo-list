@@ -56,6 +56,10 @@ let app = {
             }
          }
       },
+      updateTodoText(todo){
+         this.todosArray[$(todo).index()].text = $(todo).find(todoText).val();
+         this.updateLocalStorage();
+      }
    },
 
    events: {
@@ -67,6 +71,7 @@ let app = {
          this.clearButtonClick();
          this.checkmarkClick();
          this.createNewTodoEnter();
+         this.todoTextEnter();
       },
       buttonHover() {
          $(appWrapper).on({
@@ -112,6 +117,14 @@ let app = {
             app.todos.toggleTodoCompleted($(this).parent().parent());
          });
       },
+      todoTextEnter() {
+         $(list).on("keypress", todoText, function (event) {
+            if(event.which === 13){
+               app.todos.updateTodoText($(this).parent().parent());
+            }
+            $(this).blur();
+         });
+      }
    },
 }
 
