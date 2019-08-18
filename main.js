@@ -1,15 +1,127 @@
-appWrapper = "main";
-plusButton = "#plus";
-createTodoInput = "#create-todo";
-newTodoSection = "#new-todo";
-clearButton = "clear";
-todoList = "ul";
+const appWrapper = "main";
+const plusButton = "#plus";
+const createTodoInput = "#create-todo";
+const newTodoSection = "#new-todo";
+const clearButton = "#clear";
+const trashCan = ".fa-trash";
+const checkmark = ".check";
+const rotate = ".rotate";
+const list = "ul";
+
+let app = {
+   run() {
+      this.todos.initTodosFromStorage();
+      this.events.addEventListeners();
+      console.log(localStorage);
+      console.log(this.todos.todosArray);
+   },
+
+   todos: {
+      localStorageKey: "app",
+      todosArray: [],
+      
+      updateLocalStorage() {
+         localStorage.setItem(this.localStorageKey, JSON.stringify(this.todosArray));
+      },
+      addTodo(text, completed) {
+         let todo = new Todo(text, completed);
+         this.todosArray.push(todo);
+         $(list).prepend(todo.html());
+         this.updateLocalStorage();
+      },
+      removeTodo(todo) {
+         this.todosArray.splice($(todo).index(), 1);
+         $(todo).remove();
+         this.updateLocalStorage();
+      },
+      clearTodos() {
+         this.todosArray = [];
+         $(list).empty();
+         this.updateLocalStorage();
+         console.log(localStorage);
+         console.log(app.todos.todosArray);
+      },
+      toggleTodoCompleted(todo) {
+         this.todosArray[$(todo).index()].toggleCompleted();
+         $(todo).find(".check").toggleClass("fa-circle fa-check-circle");
+         this.updateLocalStorage();
+      },
+      initTodosFromStorage() {
+         if (localStorage.length != 0) {
+            let storageArray = JSON.parse(localStorage.getItem(this.localStorageKey));
+   
+            for (let i = 0; i < storageArray.length; i++) {
+               this.addTodo(storageArray[i].text, storageArray[i].completed);
+            }
+         }
+      },
+   },
+
+   events: {
+      addEventListeners() {
+         this.buttonHover();
+         this.plusButtonClick();
+         this.trashCanClick();
+         this.rotateElementClick();
+         this.clearButtonClick();
+         this.checkmarkClick();
+         this.createNewTodoEnter();
+      },
+      buttonHover() {
+         $(appWrapper).on({
+            mouseenter: function () {
+               $(this).addClass("rainbow-text");
+            },
+            mouseleave: function () {
+               $(this).removeClass("rainbow-text");
+            }
+         }, `${plusButton}, ${checkmark}, ${trashCan}`);
+      },
+      plusButtonClick() {
+         $(plusButton).click(function () {
+            $(newTodoSection).toggleClass("visible");
+            $(createTodoInput).toggleClass("visible");
+         });
+      },
+      trashCanClick() {
+         $(list).on("click", trashCan, function () {
+            app.todos.removeTodo($(this).parent().parent());
+         });
+      },
+      rotateElementClick() {
+         $(rotate).click(function () {
+            $(this).toggleClass("down");
+         });
+      },
+      createNewTodoEnter() {
+         $(createTodoInput).keypress(function (event) {
+            if (event.which === 13) {
+               app.todos.addTodo($(this).val(), false);
+               $(this).val("");
+            }
+         });
+      },
+      clearButtonClick() {
+         $(clearButton).on('click', function () {
+            app.todos.clearTodos();
+         });
+      },
+      checkmarkClick() {
+         $(list).on('click', checkmark, function () {
+            app.todos.toggleTodoCompleted($(this).parent().parent());
+
+            let index = $(this).parent().parent().index();
+            console.log(index);
+            console.log(app.todos.todosArray[index].text);
+         });
+      }
+   },
+}
 
 class Todo {
    constructor(text, completed) {
       this.text = text;
       this.completed = completed;
-      todosContainer.addTodo(this);
    }
    toggleCompleted = () => {
       this.completed = !(this.completed);
@@ -21,110 +133,9 @@ class Todo {
    }
 }
 
-let todosContainer = {
-   todos: [],
-   localStorageKey: "todosContainer",
-
-   storeContainer() {
-      localStorage.setItem(this.localStorageKey, JSON.stringify(this.todos));
-   },
-   addTodo(todo) {
-      this.todos.push(todo);
-   },
-   initTodos() {
-      let storageArray = JSON.parse(localStorage.getItem(this.localStorageKey));
-
-      for (let i = 0; i < storageArray.length; i++) {
-         new Todo(storageArray[i].text, storageArray[i].completed);
-      }
-   },
-   length() {
-      return this.todos.length;
-   },
-   removeTodo(index) {
-      this.todos.splice(index,1);
-   },
-   clear() {
-      this.todos = [];
-   }
+function status(){
+   console.log(localStorage);
+   console.log(app.todos.todosArray);
 }
 
-let eventHandler = {
-   addEventListeners() {
-      this.plusButtonClickEvent();
-      this.rotateClickEvent();
-      this.hoverEffectsEvent();
-      this.createNewTodoEvent();
-      this.clearButtonClickEvent();
-      this.toggleCompletedTodoEvent();
-      this.deleteTodoEvent();
-   },
-   plusButtonClickEvent() {
-      $(plusButton).click(function () {
-         $("#new-todo").toggleClass("visible");
-         $("#create-todo").toggleClass("visible");
-      });
-   },
-   rotateClickEvent() {
-      $(".rotate").click(function () {
-         $(this).toggleClass("down");
-      });
-   },
-   hoverEffectsEvent() {
-      $(appWrapper).on({
-         mouseenter: function () {
-            $(this).addClass("rainbow-text");
-         },
-         mouseleave: function () {
-            $(this).removeClass("rainbow-text");
-         }
-      }, "#plus, .fa-trash, .check");
-   },
-   createNewTodoEvent() {
-      $(createTodoInput).keypress(function (event) {
-         if (event.which === 13) {
-            let todo = new Todo($(this).val(), false);
-            todosContainer.storeContainer();
-            $(todoList).prepend(todo.html());
-            $(this).val("");
-         }
-      });
-   },
-   clearButtonClickEvent() {
-      $(clearButton).click(function () {
-         $("ul").empty();
-         localStorage.clear();
-      });
-   },
-   toggleCompletedTodoEvent() {
-      $(todoList).on("click", ".check", function () {
-         let listItemIndex = $(this).parent().parent().index();
-         $(this).toggleClass("fa-circle fa-check-circle");
-         todosContainer.todos[listItemIndex].toggleCompleted();
-         todosContainer.storeContainer();
-      });
-   },
-   deleteTodoEvent() {
-      $(todoList).on("click", ".fa-trash", function () {
-         let todo = $(this).parent().parent();
-         todosContainer.removeTodo($(todo).index());
-         todosContainer.storeContainer();
-         $(todo).remove();
-      });
-   }
-}
-
-function initApp() {
-   eventHandler.addEventListeners();
-   console.log(localStorage.length);
-
-   if (localStorage.length != 0) {
-      todosContainer.initTodos();
-
-      for (let i = 0; i < todosContainer.length(); i++) {
-
-      }
-   }
-}
-
-initApp();
+app.run();
