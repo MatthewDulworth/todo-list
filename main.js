@@ -41,6 +41,9 @@ let todosContainer = {
    length() {
       return this.todos.length;
    },
+   removeTodo(index) {
+      this.todos.splice(index,1);
+   },
    clear() {
       this.todos = [];
    }
@@ -103,8 +106,10 @@ let eventHandler = {
    },
    deleteTodoEvent() {
       $(todoList).on("click", ".fa-trash", function () {
-         localStorage.removeItem($(this).parent().parent().attr("id"));
-         $(this).parent().parent().remove();
+         let todo = $(this).parent().parent();
+         todosContainer.removeTodo($(todo).index());
+         todosContainer.storeContainer();
+         $(todo).remove();
       });
    }
 }
