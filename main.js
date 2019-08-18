@@ -7,6 +7,7 @@ const trashCan = ".fa-trash";
 const checkmark = ".check";
 const rotate = ".rotate";
 const list = "ul";
+const todoText = ".todo-text";
 
 let app = {
    run() {
@@ -19,13 +20,13 @@ let app = {
    todos: {
       localStorageKey: "app",
       todosArray: [],
-      
+
       updateLocalStorage() {
          localStorage.setItem(this.localStorageKey, JSON.stringify(this.todosArray));
       },
       addTodo(text, completed) {
          let todo = new Todo(text, completed);
-         this.todosArray.push(todo);
+         this.todosArray.unshift(todo);
          $(list).prepend(todo.html());
          this.updateLocalStorage();
       },
@@ -49,8 +50,8 @@ let app = {
       initTodosFromStorage() {
          if (localStorage.length != 0) {
             let storageArray = JSON.parse(localStorage.getItem(this.localStorageKey));
-   
-            for (let i = 0; i < storageArray.length; i++) {
+
+            for (let i = storageArray.length - 1; i >= 0; i--) {
                this.addTodo(storageArray[i].text, storageArray[i].completed);
             }
          }
@@ -102,19 +103,15 @@ let app = {
          });
       },
       clearButtonClick() {
-         $(clearButton).on('click', function () {
+         $(clearButton).click(function () {
             app.todos.clearTodos();
          });
       },
       checkmarkClick() {
          $(list).on('click', checkmark, function () {
             app.todos.toggleTodoCompleted($(this).parent().parent());
-
-            let index = $(this).parent().parent().index();
-            console.log(index);
-            console.log(app.todos.todosArray[index].text);
          });
-      }
+      },
    },
 }
 
@@ -133,7 +130,7 @@ class Todo {
    }
 }
 
-function status(){
+function status() {
    console.log(localStorage);
    console.log(app.todos.todosArray);
 }
