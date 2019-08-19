@@ -8,6 +8,8 @@ const checkmark = ".check";
 const rotate = ".rotate";
 const list = "ul";
 const todoText = ".todo-text";
+const horizontalShakeAnimation = "shakeX";
+const verticalShakeAnimation = "shakeY";
 
 let app = {
    run() {
@@ -57,18 +59,31 @@ let app = {
             }
          }
       },
-      saveTodoText(todo){
+      saveTodoText(todo) {
          this.todosArray[$(todo).index()].savedValue = $(todo).find(todoText).val();
       },
-      updateTodoText(todo){
+      updateTodoText(todo, type) {
          let index = $(todo).index();
-         if($(todo).find(todoText).val() != undefined && $(todo).find(todoText).val() != ""){
+         if ($(todo).find(todoText).val() != undefined && $(todo).find(todoText).val() != "") {
             this.todosArray[index].text = $(todo).find(todoText).val();
+            if(type === "enter"){
+               $(todo).find(todoText).blur();
+               $(todo).addClass(verticalShakeAnimation);
+               window.setTimeout(function(){
+                  $(todo).removeClass(verticalShakeAnimation);
+               }, 300);
+            }
          }
-         else{
+         else {
             let text = this.todosArray[index].savedValue;
             this.todosArray[index].text = text;
-            $(todo).find(todoText).val(text);
+            $(todo).addClass(horizontalShakeAnimation);
+            window.setTimeout(function(){
+               $(todo).removeClass(horizontalShakeAnimation);
+               if(type === "focusout"){
+                  $(todo).find(todoText).val(text);
+               }
+            }, 500);
          }
          this.updateLocalStorage();
       }
@@ -94,7 +109,7 @@ let app = {
             mouseleave: function () {
                $(this).removeClass("rainbow-text");
             }
-         },`${plusButton}, ${checkmark}, ${trashCan}`);
+         }, `${plusButton}, ${checkmark}, ${trashCan}`);
       },
       plusButtonClick() {
          $(plusButton).click(function () {
@@ -115,8 +130,16 @@ let app = {
       createNewTodoEnter() {
          $(createTodoInput).keypress(function (event) {
             if (event.which === 13) {
-               app.todos.addTodo($(this).val(), false);
-               $(this).val("");
+               if ($(this).val() != undefined && $(this).val() != "") {
+                  app.todos.addTodo($(this).val(), false);
+                  $(this).val("");
+               }
+               else {
+                  $(newTodoSection).addClass(horizontalShakeAnimation)
+                  window.setTimeout(function () {
+                     $(newTodoSection).removeClass(horizontalShakeAnimation);
+                  }, 500);
+               }
             }
          });
       },
@@ -132,18 +155,18 @@ let app = {
       },
       todoTextFocus() {
          $(list).on({
-            focusin: function(){
+            focusin: function () {
                app.todos.saveTodoText($(this).parent().parent());
             },
-            focusout: function(){
-               app.todos.updateTodoText($(this).parent().parent());
-            } 
+            focusout: function () {
+               app.todos.updateTodoText($(this).parent().parent(), "focusout");
+            }
          }, todoText);
       },
       todoTextEnter() {
          $(list).on("keypress", todoText, function (event) {
-            if(event.which === 13){
-               $(this).blur();
+            if (event.which === 13) {
+               app.todos.updateTodoText($(this).parent().parent(), "enter");
             }
          });
       }
@@ -157,11 +180,11 @@ class Todo {
       this.savedValue = undefined;
    }
    // doesnt work in safari if it is an arrow function
-   toggleCompleted(){
-      this.completed= !(this.completed);
+   toggleCompleted() {
+      this.completed = !(this.completed);
    }
    // doesnt work in safari if it is an arrow function
-   html(){
+   html() {
       let checked = (this.completed) ? "fa-check-circle" : "fa-circle";
       let html = `<li><div><span class='check far ${checked}'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off" placeholder="Add To-Do Text"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
       return html;

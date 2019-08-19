@@ -6,7 +6,7 @@ html {
    box-sizing: inherit;
 }
 
-input:focus{
+input:focus {
    outline: none;
 }
 
@@ -40,10 +40,10 @@ header {
    margin-bottom: 20px;
 }
 
-#plus-icon{
+#plus-icon {
    cursor: pointer;
    height: 24px;
-   width:  24px;
+   width: 24px;
    text-align: center;
 }
 
@@ -56,7 +56,7 @@ header {
    transition: all 0.2s linear;
 }
 
-#new-todo.visible{
+#new-todo.visible {
    border-bottom: 1px dashed grey;
    margin-bottom: 15px;
    line-height: normal;
@@ -71,7 +71,7 @@ header {
    transition: 0.2s linear;
 }
 
-#create-todo.visible{
+#create-todo.visible {
    height: 21px;
 }
 
@@ -89,7 +89,7 @@ li {
    justify-content: space-between;
 }
 
-li div{
+li div {
    width: 500px;
    display: flex;
    align-items: center;
@@ -103,37 +103,37 @@ li div{
    margin: 0px;
 }
 
-.check{
+.check {
    margin-right: 5px;
    height: 16px;
    cursor: pointer;
 }
 
-.menu{
+.menu {
    width: 0;
    opacity: 0;
    transition: 0.2s linear;
 }
 
-li:hover .menu{
+li:hover .menu {
    width: 17px;
    opacity: 1;
 }
 
-.fa-trash{
+.fa-trash {
    cursor: pointer;
 }
 
-.rotate{
+.rotate {
    -moz-transition: transform 0.2s linear;
    -webkit-transition: transform 0.2s linear;
    transition: transform 0.2s linear;
 }
 
-.rotate.down{
-   -moz-transform:rotate(90deg);
-   -webkit-transform:rotate(90deg);
-   transform:rotate(90deg);
+.rotate.down {
+   -moz-transform: rotate(90deg);
+   -webkit-transform: rotate(90deg);
+   transform: rotate(90deg);
 }
 
 .rainbow-text {
@@ -154,4 +154,48 @@ li:hover .menu{
    background-image: linear-gradient(white, white), radial-gradient(circle at top left, #f00, #3020ff);
    background-origin: border-box;
    background-clip: content-box, border-box;
+}
+
+.shakeX {
+   animation: shakeX 0.5s infinite;
+}
+
+@keyframes shakeX {
+   0% {
+      transform: translate(0);
+   }
+   20% {
+      transform: translate(5px);
+   }
+   40% {
+      transform: translate(-5px);
+   }
+   60% {
+      transform: translate(5px);
+   }
+   80% {
+      transform: translate(-5px);
+   }
+   100% {
+      transform: translate(0);
+   }
+}
+
+.shakeY {
+   animation: shakeY 0.3s infinite;
+}
+
+@keyframes shakeY {
+   0% {
+      transform: translate(0, 0);
+   }
+   40% {
+      transform: translate(0, -3px);
+   }
+   80% {
+      transform: translate(0, 1px);
+   }
+   100% {
+      transform: translate(0, 0);
+   }
 }
