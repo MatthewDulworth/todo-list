@@ -75,11 +75,6 @@ header {
    height: 21px;
 }
 
-/* doesn't work */
-#create-todo:focus{
-   box-shadow: 0 0 2pt 2pt #FF0080;
-}
-
 ul {
    list-style: none;
    margin: 0;
@@ -106,10 +101,6 @@ li div{
    font-size: 16px;
    padding: 0px;
    margin: 0px;
-}
-
-.todo-text:focus{
-   box-shadow: 0 0 2pt 2pt rgb(255,37,80);
 }
 
 .check{

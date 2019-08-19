@@ -57,19 +57,18 @@ let app = {
             }
          }
       },
-      // is never called
       saveTodoText(todo){
          this.todosArray[$(todo).index()].savedValue = $(todo).find(todoText).val();
-         console.log(this.todosArray[$(todo).index()].savedValue);
       },
       updateTodoText(todo){
          let index = $(todo).index();
-         console.log($(todo).find(todoText).val());
-         if($(todo).find(todoText).val() != undefined){
+         if($(todo).find(todoText).val() != undefined && $(todo).find(todoText).val() != ""){
             this.todosArray[index].text = $(todo).find(todoText).val();
          }
          else{
-            this.todosArray[index].text = this.todosArray[index].savedValue;
+            let text = this.todosArray[index].savedValue;
+            this.todosArray[index].text = text;
+            $(todo).find(todoText).val(text);
          }
          this.updateLocalStorage();
       }
@@ -84,6 +83,7 @@ let app = {
          this.clearButtonClick();
          this.checkmarkClick();
          this.createNewTodoEnter();
+         this.todoTextFocus();
          this.todoTextEnter();
       },
       buttonHover() {
@@ -130,7 +130,6 @@ let app = {
             app.todos.toggleTodoCompleted($(this).parent().parent());
          });
       },
-      // doesn't work 
       todoTextFocus() {
          $(list).on({
             focusin: function(){
@@ -139,12 +138,11 @@ let app = {
             focusout: function(){
                app.todos.updateTodoText($(this).parent().parent());
             } 
-         }, ".todo-text");
+         }, todoText);
       },
       todoTextEnter() {
          $(list).on("keypress", todoText, function (event) {
             if(event.which === 13){
-               app.todos.updateTodoText($(this).parent().parent());
                $(this).blur();
             }
          });
@@ -156,7 +154,7 @@ class Todo {
    constructor(text, completed) {
       this.text = text;
       this.completed = completed;
-      this.savedValue = "test";
+      this.savedValue = undefined;
    }
    // doesnt work in safari if it is an arrow function
    toggleCompleted(){
@@ -165,7 +163,7 @@ class Todo {
    // doesnt work in safari if it is an arrow function
    html(){
       let checked = (this.completed) ? "fa-check-circle" : "fa-circle";
-      let html = `<li><div><span class='check far ${checked}'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off" placeholder="Add Todo Text"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
+      let html = `<li><div><span class='check far ${checked}'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off" placeholder="Add To-Do Text"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
       return html;
    }
 }
