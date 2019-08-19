@@ -51,10 +51,16 @@ let app = {
          if (localStorage.length != 0) {
             let storageArray = JSON.parse(localStorage.getItem(this.localStorageKey));
 
+            // null is not an object (evaluating 'storageArray.lenght') // error only in safari
             for (let i = storageArray.length - 1; i >= 0; i--) {
                this.addTodo(storageArray[i].text, storageArray[i].completed);
             }
          }
+      },
+      // is never called
+      saveTodoText(todo){
+         this.todosArray[$(todo).index()].savedValue = $(todo).find(todoText).val();
+         console.log(this.todosArray[$(todo).index()].savedValue);
       },
       updateTodoText(todo){
          this.todosArray[$(todo).index()].text = $(todo).find(todoText).val();
@@ -117,12 +123,19 @@ let app = {
             app.todos.toggleTodoCompleted($(this).parent().parent());
          });
       },
+      // doesn't work 
+      todoTextFocus() {
+         $(list).on("focusin", todoText, function (event) {
+            console.log("focus");
+            app.todos.saveTodoText($(this).parent().parent());
+         });
+      },
       todoTextEnter() {
          $(list).on("keypress", todoText, function (event) {
             if(event.which === 13){
                app.todos.updateTodoText($(this).parent().parent());
+               $(this).blur();
             }
-            $(this).blur();
          });
       }
    },
@@ -132,13 +145,16 @@ class Todo {
    constructor(text, completed) {
       this.text = text;
       this.completed = completed;
+      this.savedValue = "";
    }
-   toggleCompleted = () => {
-      this.completed = !(this.completed);
+   // doesnt work in safari if it is an arrow function
+   toggleCompleted(){
+      this.completed= !(this.completed);
    }
-   html = () => {
+   // doesnt work in safari if it is an arrow function
+   html(){
       let checked = (this.completed) ? "fa-check-circle" : "fa-circle";
-      let html = `<li><div><span class='check far ${checked}'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
+      let html = `<li><div><span class='check far ${checked}'></span><input class='todo-text' value="${this.text}" maxlength="50" autocomplete="off" placeholder="Add Todo Text"></div><span class='menu'><i class='fa fa-trash'></i></span></li>`;
       return html;
    }
 }
