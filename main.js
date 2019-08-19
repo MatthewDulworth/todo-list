@@ -168,9 +168,4 @@ class Todo {
    }
 }
 
-function status() {
-   console.log(localStorage);
-   console.log(app.todos.todosArray);
-}
-
 app.run();
