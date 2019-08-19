@@ -1,5 +1,10 @@
 # todo-list
 A todo-list created while learning javascript.
 
+Browsers Tested with: Firefox, Safari, Crhome
+
 TODO:
-fix bug where plus sign moves slightly while before rotating.
+fix bugs
+
+BUGS:
+Firefox only: plus button moves horizontally on click occasionally
