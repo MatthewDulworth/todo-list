@@ -1,5 +1,5 @@
 const appWrapper = "main";
-const plusButton = "#plus";
+const plusButton = "#plus-icon";
 const createTodoInput = "#create-todo";
 const newTodoSection = "#new-todo";
 const clearButton = "#clear";
@@ -63,7 +63,14 @@ let app = {
          console.log(this.todosArray[$(todo).index()].savedValue);
       },
       updateTodoText(todo){
-         this.todosArray[$(todo).index()].text = $(todo).find(todoText).val();
+         let index = $(todo).index();
+         console.log($(todo).find(todoText).val());
+         if($(todo).find(todoText).val() != undefined){
+            this.todosArray[index].text = $(todo).find(todoText).val();
+         }
+         else{
+            this.todosArray[index].text = this.todosArray[index].savedValue;
+         }
          this.updateLocalStorage();
       }
    },
@@ -87,7 +94,7 @@ let app = {
             mouseleave: function () {
                $(this).removeClass("rainbow-text");
             }
-         }, `${plusButton}, ${checkmark}, ${trashCan}`);
+         },`${plusButton}, ${checkmark}, ${trashCan}`);
       },
       plusButtonClick() {
          $(plusButton).click(function () {
@@ -125,10 +132,14 @@ let app = {
       },
       // doesn't work 
       todoTextFocus() {
-         $(list).on("focusin", todoText, function (event) {
-            console.log("focus");
-            app.todos.saveTodoText($(this).parent().parent());
-         });
+         $(list).on({
+            focusin: function(){
+               app.todos.saveTodoText($(this).parent().parent());
+            },
+            focusout: function(){
+               app.todos.updateTodoText($(this).parent().parent());
+            } 
+         }, ".todo-text");
       },
       todoTextEnter() {
          $(list).on("keypress", todoText, function (event) {
@@ -145,7 +156,7 @@ class Todo {
    constructor(text, completed) {
       this.text = text;
       this.completed = completed;
-      this.savedValue = "";
+      this.savedValue = "test";
    }
    // doesnt work in safari if it is an arrow function
    toggleCompleted(){

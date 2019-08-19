@@ -6,6 +6,10 @@ html {
    box-sizing: inherit;
 }
 
+input:focus{
+   outline: none;
+}
+
 body {
    font-family: 'Roboto', sans-serif;
    margin: 0;
@@ -36,8 +40,11 @@ header {
    margin-bottom: 20px;
 }
 
-#plus{
+#plus-icon{
    cursor: pointer;
+   height: 24px;
+   width:  24px;
+   text-align: center;
 }
 
 #new-todo {
@@ -66,6 +73,11 @@ header {
 
 #create-todo.visible{
    height: 21px;
+}
+
+/* doesn't work */
+#create-todo:focus{
+   box-shadow: 0 0 2pt 2pt #FF0080;
 }
 
 ul {
@@ -97,7 +109,7 @@ li div{
 }
 
 .todo-text:focus{
-   box-shadow: 0 0 2pt 2pt #FF0080;
+   box-shadow: 0 0 2pt 2pt rgb(255,37,80);
 }
 
 .check{
